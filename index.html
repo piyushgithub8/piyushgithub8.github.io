@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Piyush — BI Engineer & AI Builder</title>
+<script>
+  // Apply the saved (or system) theme before first paint to avoid a flash
+  (function () {
+    let theme = null;
+    try { theme = localStorage.getItem('theme'); } catch (e) {}
+    if (!theme) theme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -19,6 +28,30 @@
     --muted: #6b6b80;
     --mono: 'JetBrains Mono', monospace;
     --sans: 'Syne', sans-serif;
+    --nav-bg: rgba(10,10,15,0.95);
+    --nav-open-bg: rgba(10,10,15,0.98);
+    --ai-text: #a78bfa;
+    --btn-hover: #fff;
+    --green: #4ade80;
+    color-scheme: dark;
+  }
+
+  :root[data-theme="light"] {
+    --bg: #f6f6f9;
+    --surface: #ffffff;
+    --surface2: #eeeef4;
+    --border: #d9d9e3;
+    --accent: #0284a8;
+    --accent2: #6d28d9;
+    --accent3: #b45309;
+    --text: #14141c;
+    --muted: #5a5a6e;
+    --nav-bg: rgba(246,246,249,0.95);
+    --nav-open-bg: rgba(246,246,249,0.98);
+    --ai-text: #6d28d9;
+    --btn-hover: #14141c;
+    --green: #15803d;
+    color-scheme: light;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -75,7 +108,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(to bottom, rgba(10,10,15,0.95), transparent);
+    background: linear-gradient(to bottom, var(--nav-bg), transparent);
     backdrop-filter: blur(10px);
   }
 
@@ -239,7 +272,7 @@
   }
 
   .btn-primary:hover {
-    background: #fff;
+    background: var(--btn-hover);
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0,229,255,0.3);
   }
@@ -403,7 +436,7 @@
   .skill-tag.ai:hover {
     background: rgba(124,58,237,0.15);
     border-color: var(--accent2);
-    color: #a78bfa;
+    color: var(--ai-text);
   }
 
   /* Projects */
@@ -491,7 +524,7 @@
   .project-badge.ai-badge {
     background: rgba(124,58,237,0.1);
     border-color: rgba(124,58,237,0.25);
-    color: #a78bfa;
+    color: var(--ai-text);
   }
 
   /* Experience */
@@ -791,13 +824,13 @@
     border-radius: 99px;
     font-family: var(--mono);
     font-size: 13px;
-    color: #4ade80;
+    color: var(--green);
   }
 
   .avail-dot {
     width: 8px; height: 8px;
     border-radius: 50%;
-    background: #4ade80;
+    background: var(--green);
     animation: pulse-dot 2s infinite;
   }
 
@@ -871,6 +904,27 @@
     margin-left: 8px;
   }
 
+  /* Theme switch */
+  nav { gap: 24px; }
+  .nav-logo { margin-right: auto; }
+
+  .theme-toggle {
+    width: 34px; height: 34px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.3s;
+  }
+
+  .theme-toggle:hover { border-color: var(--accent); transform: rotate(20deg); }
+
+  body, nav {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
   /* Mobile menu */
   .nav-toggle {
     display: none;
@@ -916,9 +970,10 @@
   @media (max-width: 768px) {
     nav { padding: 16px 24px; flex-wrap: wrap; }
     .nav-toggle { display: block; }
-    .nav-links { display: none; width: 100%; flex-direction: column; gap: 16px; padding: 20px 0 8px; }
+    nav { gap: 12px; }
+    .nav-links { order: 3; display: none; width: 100%; flex-direction: column; gap: 16px; padding: 20px 0 8px; }
     nav.open .nav-links { display: flex; }
-    nav.open { background: rgba(10,10,15,0.98); }
+    nav.open { background: var(--nav-open-bg); }
     #hero, section { padding: 80px 24px 60px; }
     #about { grid-template-columns: 1fr; gap: 40px; padding: 60px 24px; }
     .hero-stats { display: none; }
@@ -949,6 +1004,7 @@
 <!-- Nav -->
 <nav id="nav">
   <div class="nav-logo">// piyush.ghungrud</div>
+  <button class="theme-toggle" id="themeToggle" aria-label="Switch to light mode">☀</button>
   <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks">Menu</button>
   <ul class="nav-links" id="navLinks">
     <li><a href="#about">About</a></li>
@@ -1074,7 +1130,7 @@
       </div>
     </div>
     <div class="skill-category" style="border-color: rgba(124,58,237,0.3);">
-      <div class="skill-cat-title" style="color:#a78bfa;">AI & Automation</div>
+      <div class="skill-cat-title" style="color:var(--ai-text);">AI & Automation</div>
       <div class="skill-cluster-label" style="color:#7c3aed;">Expanding focus</div>
       <div class="skill-tags">
         <span class="skill-tag ai">LLM APIs</span>
@@ -1364,6 +1420,21 @@
   onScroll();
 
   backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Light / dark switch (remembers the visitor's choice)
+  const themeToggle = document.getElementById('themeToggle');
+  function syncThemeButton() {
+    const light = document.documentElement.getAttribute('data-theme') === 'light';
+    themeToggle.textContent = light ? '☾' : '☀';
+    themeToggle.setAttribute('aria-label', light ? 'Switch to dark mode' : 'Switch to light mode');
+  }
+  themeToggle.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('theme', next); } catch (e) {}
+    syncThemeButton();
+  });
+  syncThemeButton();
 
   // Mobile menu
   const nav = document.getElementById('nav');
