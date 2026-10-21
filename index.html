@@ -1073,16 +1073,28 @@
   .contact-inner {
     position: relative;
     z-index: 2;
-    max-width: 600px;
+    max-width: 760px;
     margin: 0 auto;
   }
 
   .contact-title {
-    font-size: clamp(36px, 5vw, 64px);
+    font-size: clamp(30px, 5vw, 64px);
     font-weight: 800;
     letter-spacing: -0.03em;
     margin-bottom: 20px;
     line-height: 1;
+  }
+
+  .contact-title span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @media (max-width: 600px) {
+    .contact-title { line-height: 1.1; }
+    .contact-title br { display: none; }
   }
 
   .contact-sub {
@@ -1624,7 +1636,7 @@
       <ul class="timeline-points">
         <li>Designed a governed Power BI platform — 3 workspaces, 30+ reports, 60+ stakeholders across Sales, Operations and Leadership — with sensitivity labels, lineage and access governance for pharma compliance</li>
         <li>Owned requirements, dimensional modelling and ETL validation across 7+ end-to-end BI projects, running 2 at a time; mentored developers</li>
-        <li>Cut dashboard load time from 20s to under 5s (75% faster) and Power Query refresh from 45 to 20 minutes (55% faster) via DAX Studio, VertiPaq Analyzer, query folding and incremental refresh</li>
+        <li>Cut dashboard load time from 20s to under 5s (75% faster) and Power Query refresh from 45 to 20 minutes (56% faster) via DAX Studio, VertiPaq Analyzer, query folding and incremental refresh</li>
         <li>Set up Git-based source control and CI/CD deployment pipelines; administered Power BI Service and migrated Tableau, QlikView and SSRS reports to Power BI</li>
       </ul>
       <div class="timeline-sub">Key engagements</div>
@@ -1677,9 +1689,9 @@
   <div class="contact-glow"></div>
   <div class="contact-inner">
     <div class="section-label" style="justify-content:center;">Contact</div>
-    <h2 class="contact-title">Let's build<br><span style="color:var(--accent)">something.</span></h2>
+    <h2 class="contact-title">Let's turn data<br> <span>into decisions.</span></h2>
     <p class="contact-sub">
-      Open to BI Engineer, Analytics Engineer, and Data/AI Engineer roles.<br>
+      Open to BI &amp; Analytics Engineer roles — Power BI, Fabric and Snowflake.<br>
       Happy to chat — even if you're not hiring right now.
     </p>
     <div class="availability-row">
@@ -1690,7 +1702,7 @@
       <div class="role-pills">
         <span class="role-pill">BI Engineer</span>
         <span class="role-pill">Analytics Engineer</span>
-        <span class="role-pill">Data / AI Engineer</span>
+        <span class="role-pill">Power BI Developer</span>
       </div>
     </div>
     <div class="contact-links">
