@@ -662,11 +662,64 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
+    gap: 64px;
+    align-items: center;
   }
 
   .hero-sub { display: block; margin-top: 6px; }
 
+  /* At-a-glance facts beside the hero text */
+  .hero-facts {
+    border-left: 1px solid var(--border);
+    padding-left: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 0.95s;
+  }
+
+  .fact-num {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .fact-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .fact-lead .fact-label { color: var(--muted); margin: 10px 0 0; line-height: 1.6; }
+
+  .fact-value {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
   @media (max-width: 960px) {
+    .hero-inner { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+    .hero-facts {
+      border-left: none;
+      border-top: 1px solid var(--border);
+      padding: 28px 0 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .fact-num { font-size: 48px; }
     .section-title { font-size: clamp(26px, 7.5vw, 40px); overflow-wrap: anywhere; }
     .project-card { padding: 24px; }
     .project-meta-row { flex-wrap: wrap; gap: 8px; }
@@ -776,7 +829,7 @@
   .cert-more:hover { text-decoration: underline; }
 
   /* Gallery certificate cards (styled from the file name) */
-  .gallery-cert {
+  .gallery-media.gallery-cert {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1305,7 +1358,7 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .reveal, .timeline-item { opacity: 1; transform: none; transition: none; }
-    .hero-tag, .hero-name, .hero-title, .hero-bio, .hero-actions { animation: none; opacity: 1; }
+    .hero-tag, .hero-name, .hero-title, .hero-bio, .hero-actions, .hero-facts { animation: none; opacity: 1; }
     .typed-caret, .gallery-card { animation: none; }
   }
 </style>
@@ -1348,6 +1401,25 @@
         <a href="resume.pdf" class="btn-secondary" download>Download Resume</a>
       </div>
     </div>
+
+    <aside class="hero-facts" aria-label="At a glance">
+      <div class="fact fact-lead">
+        <div class="fact-num" data-years-num>4+</div>
+        <div class="fact-label">Years building BI systems<br>since Oct 2022</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Currently</div>
+        <div class="fact-value">SDE II — BI · Solutionec</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Microsoft certified</div>
+        <div class="fact-value">DP-700 · DP-600 · PL-300</div>
+      </div>
+      <div class="fact">
+        <div class="fact-label">Domains</div>
+        <div class="fact-value">Pharma · Healthcare · Sales</div>
+      </div>
+    </aside>
   </div>
 </section>
 
@@ -1683,6 +1755,9 @@
   const careerYears = Math.floor(careerMonths / 6) / 2;
 
   document.getElementById('year').textContent = new Date().getFullYear();
+  document.querySelectorAll('[data-years-num]').forEach(el => {
+    el.textContent = careerYears + '+';
+  });
   document.querySelectorAll('[data-years-text]').forEach(el => {
     el.textContent = careerYears + '+ years';
   });
@@ -1939,8 +2014,17 @@
     other: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--accent)"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5M9 13h8M9 17h6"/></svg>',
   };
 
+  // Snowflake "Hands-On Essentials" badge codes → full names
+  const SNOWFLAKE_BADGES = {
+    DWW: 'Hands-On Essentials: Data Warehousing Workshop',
+    DLKW: 'Hands-On Essentials: Data Lake Workshop',
+    DNGW: 'Hands-On Essentials: Data Engineering Workshop',
+    DABW: 'Hands-On Essentials: Data Application Builders Workshop',
+    CMCW: 'Hands-On Essentials: Collaboration, Marketplace & Cost Estimation Workshop',
+  };
+
   function certInfo(title) {
-    const examMatch = title.match(/([A-Z]{2,3})-?(\d{3})/);
+    const examMatch = title.match(/\b([A-Z]{2,3})-?(\d{3})\b/);
     let issuer = 'other', issuerName = 'Certificate';
     if (/microsoft/i.test(title) || examMatch) { issuer = 'microsoft'; issuerName = 'Microsoft'; }
     else if (/snowflake/i.test(title)) { issuer = 'snowflake'; issuerName = 'Snowflake'; }
@@ -1948,7 +2032,7 @@
     let badge = examMatch ? examMatch[1] + '-' + examMatch[2] : '';
     if (!badge) {
       // Short all-caps code in the name, e.g. "Snowflake DLKW Certificate"
-      const code = title.replace(/snowflake/i, '').match(/[A-Z]{2,6}/);
+      const code = title.replace(/snowflake/i, '').match(/\b[A-Z]{2,6}\b/);
       badge = code ? code[0] : 'PDF';
     }
 
@@ -1957,7 +2041,7 @@
       .replace(/^\s*microsoft certified:?\s*/i, '')
       .replace(/\s{2,}/g, ' ')
       .trim();
-    return { issuer, issuerName, badge, name: name || title };
+    return { issuer, issuerName, badge, name: SNOWFLAKE_BADGES[badge] || name || title };
   }
 
   let showGalleryCategory = null;
