@@ -1,0 +1,7 @@
+# Windows / Office clutter
+desktop.ini
+Thumbs.db
+~$*
+
+# Local helper, not part of the site
+sync-website.bat
